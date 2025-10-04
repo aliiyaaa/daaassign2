@@ -235,4 +235,64 @@ public class HeapSortTest {
         int[] arr = {1, 2, 3};
         HeapSort.printArray(arr, "Test");
     }
+    
+    @Test
+    void testCSVExport() {
+        try {
+            PerformanceTracker.clearHistory();
+            
+            int[] test1 = {5, 2, 8, 1, 9};
+            int[] test2 = {10, 7, 3, 6, 4};
+            int[] test3 = {1, 2, 3, 4, 5};
+            
+            PerformanceTracker tracker1 = new PerformanceTracker("HeapSort");
+            PerformanceTracker tracker2 = new PerformanceTracker("HeapSort");
+            PerformanceTracker tracker3 = new PerformanceTracker("HeapSort");
+            
+            HeapSort.heapSort(test1, tracker1);
+            HeapSort.heapSort(test2, tracker2);
+            HeapSort.heapSort(test3, tracker3);
+            
+            tracker1.save();
+            tracker2.save();
+            tracker3.save();
+            
+            PerformanceTracker.exportCSV("test_performance.csv");
+            
+            assertTrue(HeapSort.isSorted(test1));
+            assertTrue(HeapSort.isSorted(test2));
+            assertTrue(HeapSort.isSorted(test3));
+            
+        } catch (Exception e) {
+            fail("CSV export failed: " + e.getMessage());
+        }
+    }
+    
+    @Test
+    void testPerformanceTrackingMultipleRuns() {
+        PerformanceTracker.clearHistory();
+        
+        int[] sizes = {10, 50, 100};
+        
+        for (int size : sizes) {
+            int[] arr = new int[size];
+            for (int i = 0; i < size; i++) {
+                arr[i] = size - i;
+            }
+            
+            PerformanceTracker tracker = new PerformanceTracker("HeapSort");
+            HeapSort.heapSort(arr, tracker);
+            tracker.save();
+            
+            assertTrue(HeapSort.isSorted(arr));
+            assertTrue(tracker.getComparisons() > 0);
+            assertTrue(tracker.getSwaps() > 0);
+        }
+        
+        try {
+            PerformanceTracker.exportCSV("multiple_runs.csv");
+        } catch (Exception e) {
+            fail("Multiple runs CSV export failed: " + e.getMessage());
+        }
+    }
 }
