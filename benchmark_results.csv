@@ -1,0 +1,4 @@
+Algorithm,ArraySize,Comparisons,Swaps,RecursiveCalls,TimeMs
+HeapSort,100,1024,581,482,0.123
+HeapSort,500,7461,4073,3574,0.123
+HeapSort,1000,16850,9070,8071,0.226
